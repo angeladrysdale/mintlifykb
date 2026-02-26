@@ -1,0 +1,93 @@
+---
+title: "Quickstart"
+description: "Set up your development environment and add your first page"
+---
+
+## Set up your environment
+
+<Steps>
+  <Step title="Install dependencies">
+    From the project root, install the required packages:
+
+    ```bash
+    npm install
+    ```
+  </Step>
+  <Step title="Start the dev server">
+    Run the Astro development server:
+
+    ```bash
+    npm run dev
+    ```
+
+    Open the URL shown in your terminal (usually `http://localhost:4321`) to see your site.
+  </Step>
+  <Step title="Edit a page">
+    Open `docs/index.mdx` in your editor and make a change. You'll see changes in your local preview.
+  </Step>
+</Steps>
+
+## Project structure
+
+Your content lives in the `docs/` directory:
+
+| Path | Purpose |
+|------|---------|
+| `docs/*.mdx` | Documentation pages written in MDX. |
+| `docs/docs.json` | Configuration for navigation and site metadata. |
+| `docs/images/` | Images referenced from your pages. |
+| `src/` | Astro layouts, components, and styles you can customize. |
+
+## Add a new page
+
+<Steps>
+  <Step title="Create an MDX file">
+    Create a new file in the `docs/` directory. For example, `docs/my-page.mdx`:
+
+    ```mdx docs/my-page.mdx
+    ---
+    title: "My page"
+    description: "A brief description of this page"
+    ---
+
+    Write your content here using MDX.
+    ```
+  </Step>
+  <Step title="Add it to navigation">
+    Open `docs/docs.json` and add the page path (without the `.mdx` extension) to the relevant navigation group:
+
+    ```json docs/docs.json
+    {
+      "group": "Getting started",
+      "pages": [
+        "index",
+        "quickstart",
+        "my-page"
+      ]
+    }
+    ```
+  </Step>
+</Steps>
+
+## Deploy
+
+Push your changes to GitHub. If your hosting is configured to build on push, your site deploys automatically.
+
+To build the site locally:
+
+```bash
+npm run build
+```
+
+The output goes to the `dist/` directory.
+
+## Next steps
+
+<Columns cols={2}>
+  <Card title="Customize your site" icon="palette" href="/customization">
+    Configure navigation, colors, and layout.
+  </Card>
+  <Card title="Components" icon="grid-2" href="/components">
+    See the available components.
+  </Card>
+</Columns>
