@@ -60,7 +60,15 @@
         ]
       },
       {
-        "product": "API Documentation"
+        "product": "API Documentation",
+        "groups": [
+          {
+            "group": "Deals APIs",
+            "pages": [
+              "deals-api"
+            ]
+          }
+        ]
       }
     ]
   }
