@@ -44,6 +44,15 @@
           },
           "hompage"
         ]
+      },
+      {
+        "tab": "API Reference",
+        "menu": [
+          {
+            "item": "Deals Web API",
+            "openapi": "api-reference/deals-api-aug25.json"
+          }
+        ]
       }
     ]
   }
