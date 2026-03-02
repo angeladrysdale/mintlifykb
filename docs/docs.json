@@ -22,37 +22,45 @@
         }
       ]
     },
-    "tabs": [
+    "products": [
       {
-        "tab": "Docs",
-        "pages": [
+        "product": "Untitled Product",
+        "tabs": [
           {
-            "group": "Getting started",
+            "tab": "Docs",
             "pages": [
-              "index",
-              "quickstart",
-              "customization",
-              "testing"
+              {
+                "group": "Getting started",
+                "pages": [
+                  "index",
+                  "quickstart",
+                  "customization",
+                  "testing"
+                ]
+              },
+              {
+                "group": "Content",
+                "pages": [
+                  "components",
+                  "guides/example"
+                ]
+              },
+              "hompage"
             ]
           },
           {
-            "group": "Content",
-            "pages": [
-              "components",
-              "guides/example"
+            "tab": "API Reference",
+            "menu": [
+              {
+                "item": "Deals Web API",
+                "openapi": "api-reference/deals-api-aug25.json"
+              }
             ]
-          },
-          "hompage"
+          }
         ]
       },
       {
-        "tab": "API Reference",
-        "menu": [
-          {
-            "item": "Deals Web API",
-            "openapi": "api-reference/deals-api-aug25.json"
-          }
-        ]
+        "product": "API Documentation"
       }
     ]
   }
