@@ -26,8 +26,22 @@
             "pages": [
               "getting-started"
             ]
+          },
+          {
+            "group": "Marketplace Partners",
+            "pages": [
+              "getting-started-1"
+            ]
           }
         ]
+      }
+    ]
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Index UI",
+        "href": "https://app.indexexchange.com/"
       }
     ]
   }
