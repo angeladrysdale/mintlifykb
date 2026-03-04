@@ -1,0 +1,17 @@
+---
+title: "Data dictionary"
+---
+import FilterTable from "../components/FilterTable";
+
+<FilterTable
+  columns={[
+    { key: "name", label: "Name" },
+    { key: "role", label: "Role" },
+    { key: "team", label: "Team" },
+  ]}
+  data={[
+    { name: "Alice", role: "Engineer", team: "Platform" },
+    { name: "Bob", role: "Designer", team: "Product" },
+    { name: "Sam", role: "Engineer", team: "Platform" },
+  ]}
+/>

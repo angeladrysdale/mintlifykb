@@ -15,6 +15,10 @@
           {
             "item": "Deals API",
             "openapi": "api-reference/deals-api-aug25.json"
+          },
+          {
+            "item": "Segments API",
+            "openapi": "api-reference/segments-nov-2025.json"
           }
         ]
       },
@@ -40,7 +44,8 @@
         "tab": "Data dictionary",
         "icon": "database",
         "pages": [
-          "data-dictionary"
+          "data-dictionary",
+          "Docs/datadictionary"
         ]
       }
     ]
