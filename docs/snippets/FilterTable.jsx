@@ -1,20 +1,9 @@
 import React, { useMemo, useState } from "react";
 
-/**
- * FilterTable
- * - data: array of objects (rows)
- * - columns: optional [{ key, label }] to control order/labels
- *
- * Example:
- * <FilterTable
- *   data={[{ name: "Alice", team: "Platform" }]}
- *   columns={[{ key: "name", label: "Name" }, { key: "team", label: "Team" }]}
- * />
- */
-export default function FilterTable({ data = [], columns }) {
+export function FilterTable({ data = [], columns }) {
   const [query, setQuery] = useState("");
   const [sortKey, setSortKey] = useState(null);
-  const [sortDir, setSortDir] = useState("asc"); // "asc" | "desc"
+  const [sortDir, setSortDir] = useState("asc");
 
   const resolvedColumns = useMemo(() => {
     if (columns?.length) return columns;
@@ -25,24 +14,21 @@ export default function FilterTable({ data = [], columns }) {
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return data;
-
     return data.filter((row) =>
-      resolvedColumns.some(({ key }) => {
-        const val = row?.[key];
-        return String(val ?? "").toLowerCase().includes(q);
-      })
+      resolvedColumns.some(({ key }) =>
+        String(row?.[key] ?? "").toLowerCase().includes(q)
+      )
     );
   }, [data, query, resolvedColumns]);
 
   const sorted = useMemo(() => {
     if (!sortKey) return filtered;
-
     const copy = [...filtered];
+
     copy.sort((a, b) => {
       const av = a?.[sortKey];
       const bv = b?.[sortKey];
 
-      // numeric sort when both look like numbers
       const an = Number(av);
       const bn = Number(bv);
       const bothNumeric =
@@ -54,14 +40,12 @@ export default function FilterTable({ data = [], columns }) {
         !Number.isNaN(bn);
 
       let cmp;
-      if (bothNumeric) {
-        cmp = an - bn;
-      } else {
+      if (bothNumeric) cmp = an - bn;
+      else
         cmp = String(av ?? "").localeCompare(String(bv ?? ""), undefined, {
           numeric: true,
           sensitivity: "base",
         });
-      }
 
       return sortDir === "asc" ? cmp : -cmp;
     });
@@ -80,7 +64,7 @@ export default function FilterTable({ data = [], columns }) {
 
   return (
     <div style={{ width: "100%" }}>
-      <div style={{ marginBottom: 12, display: "flex", gap: 8 }}>
+      <div style={{ marginBottom: 12 }}>
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -164,6 +148,5 @@ function prettyLabel(key) {
 function renderCell(value) {
   if (value === null || value === undefined) return "";
   if (typeof value === "boolean") return value ? "Yes" : "No";
-  // If someone passes JSX, render it as-is:
   return React.isValidElement(value) ? value : String(value);
 }
