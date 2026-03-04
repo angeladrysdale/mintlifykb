@@ -22,43 +22,48 @@
         }
       ]
     },
-    "products": [
+    "languages": [
       {
-        "product": "Untitled Product",
-        "tabs": [
+        "language": "fr",
+        "products": [
           {
-            "tab": "API Reference",
-            "menu": [
+            "product": "Index Knowledge Base",
+            "tabs": [
               {
-                "item": "Deals Web API",
-                "openapi": "api-reference/deals-api-aug25.json"
+                "tab": "API Reference",
+                "menu": [
+                  {
+                    "item": "Deals Web API",
+                    "openapi": "api-reference/deals-api-aug25.json"
+                  },
+                  {
+                    "item": "Segments API",
+                    "openapi": "api-reference/segments-nov-2025.json"
+                  }
+                ]
               },
               {
-                "item": "Segments API",
-                "openapi": "api-reference/segments-nov-2025.json"
+                "tab": "Docs",
+                "pages": [
+                  {
+                    "group": "Getting started",
+                    "pages": [
+                      "index",
+                      "quickstart",
+                      "customization",
+                      "testing"
+                    ]
+                  },
+                  {
+                    "group": "Content",
+                    "pages": [
+                      "components",
+                      "guides/example"
+                    ]
+                  },
+                  "hompage"
+                ]
               }
-            ]
-          },
-          {
-            "tab": "Docs",
-            "pages": [
-              {
-                "group": "Getting started",
-                "pages": [
-                  "index",
-                  "quickstart",
-                  "customization",
-                  "testing"
-                ]
-              },
-              {
-                "group": "Content",
-                "pages": [
-                  "components",
-                  "guides/example"
-                ]
-              },
-              "hompage"
             ]
           }
         ]
