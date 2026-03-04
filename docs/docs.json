@@ -8,68 +8,9 @@
     "dark": "#15803D"
   },
   "navigation": {
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "icon": "book-open-cover",
-          "href": "https://mintlify.com/docs"
-        },
-        {
-          "anchor": "Blog",
-          "icon": "newspaper",
-          "href": "https://mintlify.com/blog"
-        }
-      ]
-    },
     "tabs": [
       {
-        "tab": "API Reference",
-        "languages": [
-          {
-            "language": "fr",
-            "products": [
-              {
-                "product": "Knowledge Base",
-                "tabs": [
-                  {
-                    "tab": "API Reference",
-                    "menu": [
-                      {
-                        "item": "Deals Web API",
-                        "openapi": "api-reference/deals-api-aug25.json"
-                      },
-                      {
-                        "item": "Segments API",
-                        "openapi": "api-reference/segments-nov-2025.json"
-                      }
-                    ]
-                  },
-                  {
-                    "tab": "Docs",
-                    "pages": [
-                      {
-                        "group": "Getting started",
-                        "pages": [
-                          "index",
-                          "customization",
-                          "testing"
-                        ]
-                      },
-                      {
-                        "group": "Content",
-                        "pages": [
-                          "components",
-                          "guides/example"
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
+        "tab": "API Reference"
       },
       {
         "tab": "Knowledge Base",
