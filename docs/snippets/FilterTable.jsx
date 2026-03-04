@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
-export function FilterTable({ data = [], columns }) {
+export const FilterTable = ({ data = [], columns }) => {
   const [query, setQuery] = useState("");
   const [sortKey, setSortKey] = useState(null);
   const [sortDir, setSortDir] = useState("asc");
@@ -24,76 +24,45 @@ export function FilterTable({ data = [], columns }) {
   const sorted = useMemo(() => {
     if (!sortKey) return filtered;
     const copy = [...filtered];
-
     copy.sort((a, b) => {
       const av = a?.[sortKey];
       const bv = b?.[sortKey];
-
-      const an = Number(av);
-      const bn = Number(bv);
-      const bothNumeric =
-        av !== null &&
-        bv !== null &&
-        av !== "" &&
-        bv !== "" &&
-        !Number.isNaN(an) &&
-        !Number.isNaN(bn);
-
-      let cmp;
-      if (bothNumeric) cmp = an - bn;
-      else
-        cmp = String(av ?? "").localeCompare(String(bv ?? ""), undefined, {
-          numeric: true,
-          sensitivity: "base",
-        });
-
+      const cmp = String(av ?? "").localeCompare(String(bv ?? ""), undefined, {
+        numeric: true,
+        sensitivity: "base",
+      });
       return sortDir === "asc" ? cmp : -cmp;
     });
-
     return copy;
   }, [filtered, sortKey, sortDir]);
 
-  function onHeaderClick(key) {
+  const onHeaderClick = (key) => {
     if (sortKey !== key) {
       setSortKey(key);
       setSortDir("asc");
     } else {
       setSortDir((d) => (d === "asc" ? "desc" : "asc"));
     }
-  }
+  };
 
   return (
-    <div style={{ width: "100%" }}>
-      <div style={{ marginBottom: 12 }}>
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search…"
-          style={{
-            width: "100%",
-            padding: "10px 12px",
-            borderRadius: 10,
-            border: "1px solid rgba(0,0,0,0.15)",
-          }}
-        />
-      </div>
+    <div className="not-prose">
+      <input
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search…"
+        className="w-full px-3 py-2 mb-3 rounded-xl border border-zinc-950/20 dark:border-white/20 bg-transparent"
+      />
 
-      <div style={{ overflowX: "auto" }}>
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse">
           <thead>
             <tr>
               {resolvedColumns.map(({ key, label }) => (
                 <th
                   key={key}
                   onClick={() => onHeaderClick(key)}
-                  style={{
-                    textAlign: "left",
-                    padding: "10px 12px",
-                    borderBottom: "1px solid rgba(0,0,0,0.15)",
-                    cursor: "pointer",
-                    userSelect: "none",
-                    whiteSpace: "nowrap",
-                  }}
+                  className="text-left px-3 py-2 border-b border-zinc-950/20 dark:border-white/20 cursor-pointer select-none whitespace-nowrap"
                   title="Click to sort"
                 >
                   {label}
@@ -102,51 +71,33 @@ export function FilterTable({ data = [], columns }) {
               ))}
             </tr>
           </thead>
-
           <tbody>
-            {sorted.length === 0 ? (
-              <tr>
-                <td
-                  colSpan={resolvedColumns.length}
-                  style={{ padding: "12px", opacity: 0.7 }}
-                >
-                  No results
-                </td>
+            {sorted.map((row, i) => (
+              <tr key={i}>
+                {resolvedColumns.map(({ key }) => (
+                  <td
+                    key={key}
+                    className="px-3 py-2 border-b border-zinc-950/10 dark:border-white/10 align-top"
+                  >
+                    {String(row?.[key] ?? "")}
+                  </td>
+                ))}
               </tr>
-            ) : (
-              sorted.map((row, idx) => (
-                <tr key={idx}>
-                  {resolvedColumns.map(({ key }) => (
-                    <td
-                      key={key}
-                      style={{
-                        padding: "10px 12px",
-                        borderBottom: "1px solid rgba(0,0,0,0.08)",
-                        verticalAlign: "top",
-                      }}
-                    >
-                      {renderCell(row?.[key])}
-                    </td>
-                  ))}
-                </tr>
-              ))
-            )}
+            ))}
           </tbody>
         </table>
+
+        {sorted.length === 0 && (
+          <div className="py-3 text-sm opacity-70">No results</div>
+        )}
       </div>
     </div>
   );
-}
+};
 
 function prettyLabel(key) {
   return String(key)
     .replace(/[_-]+/g, " ")
     .replace(/([a-z])([A-Z])/g, "$1 $2")
     .replace(/\b\w/g, (m) => m.toUpperCase());
-}
-
-function renderCell(value) {
-  if (value === null || value === undefined) return "";
-  if (typeof value === "boolean") return value ? "Yes" : "No";
-  return React.isValidElement(value) ? value : String(value);
 }
