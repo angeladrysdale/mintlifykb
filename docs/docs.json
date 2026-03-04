@@ -35,6 +35,13 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "Data dictionary",
+        "icon": "database",
+        "pages": [
+          "data-dictionary"
+        ]
       }
     ]
   },
