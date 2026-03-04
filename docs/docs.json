@@ -1,11 +1,11 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "name": "Our fake knowledge base",
-  "theme": "mint",
+  "theme": "sequoia",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#00291F",
+    "light": "#17A2B8",
+    "dark": "#8796DD"
   },
   "navigation": {
     "tabs": [
@@ -44,5 +44,14 @@
         "href": "https://app.indexexchange.com/"
       }
     ]
+  },
+  "fonts": {
+    "family": "Roboto"
+  },
+  "background": {
+    "image": "/images/IX_LogoSuite_Primary_white_55.png"
+  },
+  "styling": {
+    "eyebrows": "breadcrumbs"
   }
 }
