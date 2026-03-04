@@ -1,0 +1,2676 @@
+{
+    "openapi": "3.0.0",
+    "info":
+    {
+        "description": "Manage segments and related data.",
+        "title": "Segments API",
+        "contact":
+        {},
+        "license":
+        {
+            "name": "Proprietary"
+        },
+        "version": "4.90.2"
+    },
+    "servers":
+    [
+        {
+            "url": "//app.indexexchange.com/api"
+        }
+    ],
+    "paths":
+    {
+        "/segments/v2/segments":
+        {
+            "get":
+            {
+                "description": "Returns all segments that the current user can use or edit based on the specified query parameters.",
+                "tags":
+                [
+                    "Segments"
+                ],
+                "summary": "List segments",
+                "operationId": "segmentsGETAll",
+                "parameters":
+                [
+                    {
+                        "description": "The account ID associated with the segments that you want to return. To get an accountID, run the [List account information](accountsget) route.",
+                        "name": "accountID",
+                        "in": "query",
+                        "required": true,
+                        "schema":
+                        {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "description": "The starting page of records to return. This field is used to paginate segments.",
+                        "name": "pageOffset",
+                        "in": "query",
+                        "schema":
+                        {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "description": "The maximum number of segments to return per page. By default, up to 4,000,000,000 segments are returned. It's recommended that you return a maximum of 10,000.",
+                        "name": "pageSize",
+                        "in": "query",
+                        "schema":
+                        {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "description": "The search string for filtering the results. You can search by segment ID, the external segment ID, the external segment name, and the name of the account that owns the segment. You can enter a full or partial search string.",
+                        "name": "search",
+                        "in": "query",
+                        "schema":
+                        {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "The field by which to sort segments.",
+                        "name": "sortField",
+                        "in": "query",
+                        "schema":
+                        {
+                            "type": "string",
+                            "enum":
+                            [
+                                "ixSegmentID",
+                                "externalSegmentID",
+                                "externalSegmentName",
+                                "ownerAccountID",
+                                "status",
+                                "accessSetting",
+                                "fee",
+                                "createdDate",
+                                "modifiedDate"
+                            ]
+                        }
+                    },
+                    {
+                        "description": "The order in which to sort segments.  where:<br>`asc`= ascending order (default)<br>`desc`= descending order<br><b>Note:</b> If you add a value for `sortOrder`, you must also include a value for `sortField`.",
+                        "name": "sortOrder",
+                        "in": "query",
+                        "schema":
+                        {
+                            "type": "string",
+                            "enum":
+                            [
+                                "ASC",
+                                "DESC",
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "description": "The access setting of segment to return, where:<br>`PUBLIC`= This segment can be seen and used by any account.<br>`CUSTOM`= This segment can only be seen and used by specific accounts. To specify which accounts can access this segment, use the [Add access term](segmentsaddaccessterm) route. If you don't permission it to any accounts, it will be a private segment only available to you.<br>If you have specified a publisher account ID in the `accountID` field, you cannot specify an `accessSetting`.",
+                        "name": "accessSetting",
+                        "in": "query",
+                        "schema":
+                        {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "Only segments with an effective fee equal to or higher than this value will be returned for the selected account.",
+                        "name": "minFee",
+                        "in": "query",
+                        "schema":
+                        {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "description": "Only segments with an effective fee equal to or lower than this value will be returned for the selected account.",
+                        "name": "maxFee",
+                        "in": "query",
+                        "schema":
+                        {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "description": "The list of owner account IDs for which to return segments. Segment owners add, price, and manage segments.",
+                        "name": "ownerAccountIDs",
+                        "in": "query",
+                        "explode": true,
+                        "schema":
+                        {
+                            "type": "array",
+                            "items":
+                            {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    {
+                        "description": "The list of segment IDs to return.",
+                        "name": "segmentIDs",
+                        "in": "query",
+                        "explode": true,
+                        "schema":
+                        {
+                            "type": "array",
+                            "items":
+                            {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    {
+                        "description": "The type of segment status to return, where:<br>`A`= Active or `P`= Paused  Case sensitive.",
+                        "name": "segmentStatus",
+                        "in": "query",
+                        "explode": true,
+                        "schema":
+                        {
+                            "type": "array",
+                            "items":
+                            {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    {
+                        "description": "The ID of the segment to return as given by the data provider. A data provider is the supplier of the segment data.",
+                        "name": "externalSegmentID",
+                        "in": "query",
+                        "schema":
+                        {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "The list of IDs of the segment to return as given by the data provider. A data provider is the supplier of the segment data.",
+                        "name": "externalSegmentIDs",
+                        "in": "query",
+                        "style": "form",
+                        "explode": false,
+                        "schema":
+                        {
+                            "type": "array",
+                            "items":
+                            {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    {
+                        "description": "The ID of the data provider for which to return segments. A data provider is the supplier of the segment data.",
+                        "name": "providerID",
+                        "in": "query",
+                        "schema":
+                        {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses":
+                {
+                    "200":
+                    {
+                        "description": "OK",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/segments.GetAllSegmentsResponse"
+                                }
+                            }
+                        }
+                    },
+                    "204":
+                    {
+                        "description": "No Content"
+                    },
+                    "400":
+                    {
+                        "description": "Bad Request",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403":
+                    {
+                        "description": "Forbidden",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "499":
+                    {
+                        "description": "",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500":
+                    {
+                        "description": "Internal Server Error",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.InternalServerErr"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security":
+                [
+                    {
+                        "BearerAuth":
+                        []
+                    },
+                    {
+                        "ApiKeyAuth":
+                        []
+                    }
+                ]
+            },
+            "post":
+            {
+                "description": "Registers a segment in the Data Vendor Ecosystem and returns its metadata, including the Index-generated segment ID.",
+                "tags":
+                [
+                    "Segments"
+                ],
+                "summary": "Register segment",
+                "operationId": "segmentPOST",
+                "requestBody":
+                {
+                    "content":
+                    {
+                        "application/json":
+                        {
+                            "schema":
+                            {
+                                "$ref": "#/components/schemas/segments.SegmentPostBody"
+                            }
+                        }
+                    },
+                    "description": "Information about the new segment",
+                    "required": true
+                },
+                "responses":
+                {
+                    "201":
+                    {
+                        "description": "Created",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/segments.SegmentPostResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400":
+                    {
+                        "description": "Bad Request",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403":
+                    {
+                        "description": "Forbidden",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404":
+                    {
+                        "description": "Not Found",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "499":
+                    {
+                        "description": "",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500":
+                    {
+                        "description": "Internal Server Error",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.InternalServerErr"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security":
+                [
+                    {
+                        "BearerAuth":
+                        []
+                    },
+                    {
+                        "ApiKeyAuth":
+                        []
+                    }
+                ]
+            }
+        },
+        "/segments/v2/segments/{segmentID}":
+        {
+            "get":
+            {
+                "description": "Returns the full segment details of the segment whose ID is specified in the url path.",
+                "tags":
+                [
+                    "Segments"
+                ],
+                "summary": "Get segment information",
+                "operationId": "segmentsGETByID",
+                "parameters":
+                [
+                    {
+                        "description": "The Index-generated segment ID. To get a segmentID, run the [List segments route](segmentsgetall).",
+                        "name": "segmentID",
+                        "in": "path",
+                        "required": true,
+                        "schema":
+                        {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses":
+                {
+                    "200":
+                    {
+                        "description": "OK",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/segments.GetSingleSegmentResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400":
+                    {
+                        "description": "Bad Request",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403":
+                    {
+                        "description": "Forbidden",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404":
+                    {
+                        "description": "Not Found",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "499":
+                    {
+                        "description": "",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500":
+                    {
+                        "description": "Internal Server Error",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.InternalServerErr"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security":
+                [
+                    {
+                        "BearerAuth":
+                        []
+                    },
+                    {
+                        "ApiKeyAuth":
+                        []
+                    }
+                ]
+            },
+            "patch":
+            {
+                "description": "Updates a segment and returns the full updated segment.",
+                "tags":
+                [
+                    "Segments"
+                ],
+                "summary": "Update segment",
+                "operationId": "segmentPATCH",
+                "parameters":
+                [
+                    {
+                        "description": "The Index-generated segment ID.",
+                        "name": "segmentID",
+                        "in": "path",
+                        "required": true,
+                        "schema":
+                        {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody":
+                {
+                    "content":
+                    {
+                        "application/json":
+                        {
+                            "schema":
+                            {
+                                "$ref": "#/components/schemas/segments.SegmentPatchBody"
+                            }
+                        }
+                    },
+                    "description": "Updated segment",
+                    "required": true
+                },
+                "responses":
+                {
+                    "200":
+                    {
+                        "description": "OK",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/segments.SegmentPatchResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400":
+                    {
+                        "description": "Bad Request",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403":
+                    {
+                        "description": "Forbidden",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404":
+                    {
+                        "description": "Not Found",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "499":
+                    {
+                        "description": "",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500":
+                    {
+                        "description": "Internal Server Error",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.InternalServerErr"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security":
+                [
+                    {
+                        "BearerAuth":
+                        []
+                    },
+                    {
+                        "ApiKeyAuth":
+                        []
+                    }
+                ]
+            }
+        },
+        "/segments/v2/segments/{segmentID}:addAccessTerm":
+        {
+            "post":
+            {
+                "description": "Adds an access term. An access term defines which accounts can see and use a segment, and lets you set any applicable fees.",
+                "tags":
+                [
+                    "Segments"
+                ],
+                "summary": "Add access term",
+                "operationId": "segmentsAddAccessTerm",
+                "parameters":
+                [
+                    {
+                        "description": "The Index-generated segment ID.",
+                        "name": "segmentID",
+                        "in": "path",
+                        "required": true,
+                        "schema":
+                        {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody":
+                {
+                    "content":
+                    {
+                        "application/json":
+                        {
+                            "schema":
+                            {
+                                "$ref": "#/components/schemas/segments.AddAccessTermRequestBody"
+                            }
+                        }
+                    },
+                    "description": "Access Term Details",
+                    "required": true
+                },
+                "responses":
+                {
+                    "200":
+                    {
+                        "description": "OK",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/segments.SegmentModifyAccessTermResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400":
+                    {
+                        "description": "Bad Request",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403":
+                    {
+                        "description": "Forbidden",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404":
+                    {
+                        "description": "Not Found",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "499":
+                    {
+                        "description": "",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500":
+                    {
+                        "description": "Internal Server Error",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.InternalServerErr"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security":
+                [
+                    {
+                        "BearerAuth":
+                        []
+                    },
+                    {
+                        "ApiKeyAuth":
+                        []
+                    }
+                ]
+            }
+        },
+        "/segments/v2/segments/{segmentID}:removeAccessTerm":
+        {
+            "post":
+            {
+                "description": "Removes an access term for the specified segment and account, terminates the fee associated with the specified account, and returns updated segment terms.",
+                "tags":
+                [
+                    "Segments"
+                ],
+                "summary": "Remove access term",
+                "operationId": "segmentsRemoveAccessTerm",
+                "parameters":
+                [
+                    {
+                        "description": "The Index-generated segment ID.",
+                        "name": "segmentID",
+                        "in": "path",
+                        "required": true,
+                        "schema":
+                        {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody":
+                {
+                    "content":
+                    {
+                        "application/json":
+                        {
+                            "schema":
+                            {
+                                "$ref": "#/components/schemas/segments.RemoveAccessTermRequestBody"
+                            }
+                        }
+                    },
+                    "description": "Access Term Identifier",
+                    "required": true
+                },
+                "responses":
+                {
+                    "200":
+                    {
+                        "description": "OK",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/segments.SegmentModifyAccessTermResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400":
+                    {
+                        "description": "Bad Request",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403":
+                    {
+                        "description": "Forbidden",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404":
+                    {
+                        "description": "Not Found",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "499":
+                    {
+                        "description": "",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500":
+                    {
+                        "description": "Internal Server Error",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.InternalServerErr"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security":
+                [
+                    {
+                        "BearerAuth":
+                        []
+                    },
+                    {
+                        "ApiKeyAuth":
+                        []
+                    }
+                ]
+            }
+        },
+        "/segments/v2/segments/{segmentID}:modifyAccessTerm":
+        {
+            "post":
+            {
+                "description": "Modifies an existing access term for the specified segment and account, and returns updated segment terms.",
+                "tags":
+                [
+                    "Segments"
+                ],
+                "summary": "Modify access term",
+                "operationId": "segmentsModifyAccessTerm",
+                "parameters":
+                [
+                    {
+                        "description": "The Index-generated segment ID.",
+                        "name": "segmentID",
+                        "in": "path",
+                        "required": true,
+                        "schema":
+                        {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody":
+                {
+                    "content":
+                    {
+                        "application/json":
+                        {
+                            "schema":
+                            {
+                                "$ref": "#/components/schemas/segments.ModifyAccessTermRequestBody"
+                            }
+                        }
+                    },
+                    "description": "Access Term Details",
+                    "required": true
+                },
+                "responses":
+                {
+                    "200":
+                    {
+                        "description": "OK",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/segments.SegmentModifyAccessTermResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400":
+                    {
+                        "description": "Bad Request",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403":
+                    {
+                        "description": "Forbidden",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404":
+                    {
+                        "description": "Not Found",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "499":
+                    {
+                        "description": "",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.HTTPResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500":
+                    {
+                        "description": "Internal Server Error",
+                        "content":
+                        {
+                            "application/json":
+                            {
+                                "schema":
+                                {
+                                    "$ref": "#/components/schemas/responses.InternalServerErr"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security":
+                [
+                    {
+                        "BearerAuth":
+                        []
+                    },
+                    {
+                        "ApiKeyAuth":
+                        []
+                    }
+                ]
+            }
+        }
+    },
+    "components":
+    {
+        "schemas":
+        {
+            "segments.SegmentPostBody":
+            {
+                "type": "object",
+                "required":
+                [
+                    "accountID",
+                    "externalSegmentID",
+                    "externalSegmentName",
+                    "providerID"
+                ],
+                "properties":
+                {
+                    "accountID":
+                    {
+                        "description": "Your Index-generated account ID",
+                        "type": "integer",
+                        "format": "uint"
+                    },
+                    "description":
+                    {
+                        "description": "The description of the segment using a maximum of 500 characters. If you provide more than 500 characters, the decription is cut-off at 500 characters.",
+                        "type": "string",
+                        "format": "string",
+                        "minLength": 0
+                    },
+                    "externalSegmentID":
+                    {
+                        "description": "The segment ID that is assigned by the data provider. A data provider is the supplier of the segment data. If you aren't the data provider, you must get this ID from them.",
+                        "type": "string",
+                        "format": "string",
+                        "minLength": 0
+                    },
+                    "externalSegmentName":
+                    {
+                        "description": "The segment name that is assigned by the data provider. A data provider is the supplier of the segment data. If you aren't the data provider, you must get the segment name from them. For guidelines on how to name the segment, see [Segment naming conventions](segment-naming-conventions).",
+                        "type": "string",
+                        "format": "string",
+                        "minLength": 0
+                    },
+                    "pidCount":
+                    {
+                        "description": "The number of IDs assigned to the segment.",
+                        "type": "integer",
+                        "format": "uint",
+                        "minimum": 0
+                    },
+                    "providerID":
+                    {
+                        "description": "The ID of the data provider. A data provider is the supplier of the segment data. If you aren't the data provider, you must get their ID from them.",
+                        "type": "integer",
+                        "format": "uint",
+                        "minimum": 0
+                    },
+                    "terms":
+                    {
+                        "description": "The terms of use of this segment if they differ from the default terms",
+                        "allOf":
+                        [
+                            {
+                                "$ref": "#/components/schemas/segments.SegmentTermsPostRequestBody"
+                            }
+                        ],
+                        "nullable": true
+                    }
+                }
+            },
+            "responses.InternalServerErr":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "message":
+                    {
+                        "type": "string"
+                    }
+                }
+            },
+            "responses.HTTPResponse":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "message":
+                    {
+                        "type": "string"
+                    },
+                    "status":
+                    {
+                        "type": "integer"
+                    }
+                }
+            },
+            "segments.SegmentPatchBody":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "description":
+                    {
+                        "description": "The new description of the segment - has a maximum of 500 characters. Returns an error if more than 500 characters are provided.",
+                        "type": "string",
+                        "format": "string",
+                        "maxLength": 500,
+                        "minLength": 0
+                    },
+                    "externalSegmentName":
+                    {
+                        "description": "The new segment name",
+                        "type": "string",
+                        "format": "string",
+                        "minLength": 0
+                    },
+                    "pidCount":
+                    {
+                        "description": "The number of IDs assigned to the segment.",
+                        "type": "integer",
+                        "format": "uint",
+                        "minimum": 0
+                    },
+                    "segmentStatus":
+                    {
+                        "description": "The new segment status, where:<br>`A`= Active<br>`P`= Paused",
+                        "type": "string",
+                        "format": "string",
+                        "enum":
+                        [
+                            "A",
+                            "P"
+                        ]
+                    },
+                    "terms":
+                    {
+                        "description": "The terms of use of this segment if they differ from the default terms",
+                        "allOf":
+                        [
+                            {
+                                "$ref": "#/components/schemas/segments.SegmentTermsPatchRequestBody"
+                            }
+                        ],
+                        "nullable": true
+                    }
+                }
+            },
+            "segments.AddAccessTermRequestBody":
+            {
+                "type": "object",
+                "required":
+                [
+                    "accountID",
+                    "rule"
+                ],
+                "properties":
+                {
+                    "accountID":
+                    {
+                        "description": "The accountID to which you want to apply the access term.",
+                        "type": "integer"
+                    },
+                    "fees":
+                    {
+                        "description": " The fee the specifed account must pay to use the segment.",
+                        "type": "array",
+                        "uniqueItems": true,
+                        "items":
+                        {
+                            "type": "object",
+                            "required":
+                            [
+                                "fee",
+                                "targets"
+                            ],
+                            "properties":
+                            {
+                                "fee":
+                                {
+                                    "description": "The fee details.",
+                                    "allOf":
+                                    [
+                                        {
+                                            "$ref": "#/components/schemas/segments.FeePostRequestBody"
+                                        }
+                                    ]
+                                },
+                                "targets":
+                                {
+                                    "description": "The targets for the fee.",
+                                    "allOf":
+                                    [
+                                        {
+                                            "$ref": "#/components/schemas/segments.AccessTermFeeTarget"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "nullable": true
+                    },
+                    "rule":
+                    {
+                        "description": "Specify whether the account can see and use the segment, where:<br>`ALLOW`= The account has permission to see and use the segment<br>`BLOCK`= The account can't see or use the segment.",
+                        "type": "string",
+                        "enum":
+                        [
+                            "ALLOW",
+                            "BLOCK"
+                        ]
+                    }
+                }
+            },
+            "segments.ModifyAccessTermRequestBody":
+            {
+                "type": "object",
+                "required":
+                [
+                    "accountID"
+                ],
+                "properties":
+                {
+                    "accountID":
+                    {
+                        "description": "The accountID to which you want to apply the access term.",
+                        "type": "integer"
+                    },
+                    "fees":
+                    {
+                        "description": "The fee the specifed account must pay to use the segment.",
+                        "type": "array",
+                        "minItems": 1,
+                        "uniqueItems": true,
+                        "items":
+                        {
+                            "type": "object",
+                            "required":
+                            [
+                                "fee",
+                                "targets"
+                            ],
+                            "properties":
+                            {
+                                "fee":
+                                {
+                                    "description": "The fee details.",
+                                    "allOf":
+                                    [
+                                        {
+                                            "$ref": "#/components/schemas/segments.FeeRequestBody"
+                                        }
+                                    ]
+                                },
+                                "targets":
+                                {
+                                    "description": "The targets for the fee.",
+                                    "allOf":
+                                    [
+                                        {
+                                            "$ref": "#/components/schemas/segments.AccessTermFeeTarget"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "nullable": true
+                    },
+                    "rule":
+                    {
+                        "description": "The rule for the access term, where:<br>`ALLOW`= The account has permission to see and use the segment<br>`BLOCK`= The account can't see or use the segment.",
+                        "type": "string",
+                        "enum":
+                        [
+                            "ALLOW",
+                            "BLOCK"
+                        ]
+                    }
+                }
+            },
+            "segments.FeePostRequestBody":
+            {
+                "type": "object",
+                "required":
+                [
+                    "currency",
+                    "calculationType",
+                    "value",
+                    "vendorAccountID"
+                ],
+                "properties":
+                {
+                    "calculationType":
+                    {
+                        "description": "The vendor fee calculation type, where `C` = cpm",
+                        "type": "string",
+                        "enum":
+                        [
+                            "C"
+                        ]
+                    },
+                    "currency":
+                    {
+                        "description": "The segment fee value currency. Only USD is supported.",
+                        "type": "string"
+                    },
+                    "description":
+                    {
+                        "description": "The description given to the segment fee.",
+                        "type": "string"
+                    },
+                    "value":
+                    {
+                        "description": "The value of the segment fee in CPM.",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "vendorAccountID":
+                    {
+                        "description": "The account ID of the segment owner who will be paid the fee. If you are the owner of the segment and plan to be paid directly by Index, make sure that this is your account ID.",
+                        "type": "integer",
+                        "format": "uint"
+                    }
+                }
+            },
+            "segments.AccessTermFeeTarget":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "accountID":
+                    {
+                        "description": "The account ID to apply the fee to. You must specify either an `accountID` or `dealID`, but you can't set both.",
+                        "type": "integer",
+                        "format": "uint",
+                        "example": 123
+                    },
+                    "dealID":
+                    {
+                        "description": "The deal ID to apply the fee to. You must specify either an `accountID` or `dealID`, but you can't set both.",
+                        "type": "integer",
+                        "format": "uint",
+                        "example": 456
+                    }
+                }
+            },
+            "segments.GetAllSegmentsResponse":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "segments":
+                    {
+                        "type": "array",
+                        "items":
+                        {
+                            "$ref": "#/components/schemas/segments.Segment"
+                        }
+                    },
+                    "totalCount":
+                    {
+                        "type": "integer"
+                    }
+                }
+            },
+            "segments.GetSingleSegmentResponse":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "audienceID":
+                    {
+                        "description": "The Index-generated audience ID.",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1234
+                    },
+                    "createdDate":
+                    {
+                        "description": "The date the segment was created in YYYY-MM-DD HH:mm:ss format.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "2023-04-14 23:05:00"
+                    },
+                    "dataProvider":
+                    {
+                        "$ref": "#/components/schemas/segments.DataProvider"
+                    },
+                    "description":
+                    {
+                        "description": "The segment description assigned by the data provider. A data provider is the supplier of the segment data.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "Segment description."
+                    },
+                    "expiryDate":
+                    {
+                        "description": "The date the segment expires in YYYY-MM-DD HH:mm:ss format.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "2023-04-14 23:05:00"
+                    },
+                    "externalSegmentID":
+                    {
+                        "description": "The segment ID assigned by the data provider. A data provider is the supplier of the segment data. Only shown if you are the segment owner.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "MySegment"
+                    },
+                    "externalSegmentName":
+                    {
+                        "description": "The segment name assigned by the data provider. A data provider is the supplier of the segment data.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "My Segment Name"
+                    },
+                    "modifiedDate":
+                    {
+                        "description": "The date the segment was modified in YYYY-MM-DD HH:mm:ss format.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "2023-04-14 23:05:00"
+                    },
+                    "owner":
+                    {
+                        "$ref": "#/components/schemas/segments.SegmentOwner"
+                    },
+                    "pidCount":
+                    {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1234
+                    },
+                    "providerID":
+                    {
+                        "description": "The ID of the data provider. A data provider is the supplier of the segment data.",
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "segmentID":
+                    {
+                        "description": "The Index-generated segment ID.",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1234
+                    },
+                    "segmentStatus":
+                    {
+                        "description": "The status of the segment, where:<br />`A` = active",
+                        "type": "string",
+                        "format": "string",
+                        "example": "A"
+                    },
+                    "terms":
+                    {
+                        "description": "The terms of use of this segment",
+                        "allOf":
+                        [
+                            {
+                                "$ref": "#/components/schemas/segments.SegmentTerms"
+                            }
+                        ]
+                    }
+                }
+            },
+            "segments.SegmentPostResponse":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "access":
+                    {
+                        "description": "The access level of the segment, where:<br />`W` = write (owner of the segment)<br />`R` = read (permission to use the segment)",
+                        "type": "string",
+                        "format": "string",
+                        "enum":
+                        [
+                            "R",
+                            "W"
+                        ],
+                        "example": "W"
+                    },
+                    "audienceID":
+                    {
+                        "description": "The Index-generated audience ID.",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1234
+                    },
+                    "createdDate":
+                    {
+                        "description": "The date the segment was created in YYYY-MM-DD HH:mm:ss format",
+                        "type": "string",
+                        "format": "string",
+                        "example": "2023-04-14 23:05:00"
+                    },
+                    "dataProvider":
+                    {
+                        "$ref": "#/components/schemas/segments.DataProvider"
+                    },
+                    "description":
+                    {
+                        "description": "The segment description assigned by the data provider. A data provider is the supplier of the segment data.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "Segment description."
+                    },
+                    "expiryDate":
+                    {
+                        "description": "The date the segment expires in YYYY-MM-DD HH:mm:ss format.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "2023-04-14 23:05:00"
+                    },
+                    "externalSegmentID":
+                    {
+                        "description": "The segment ID assigned by the data provider. A data provider is the supplier of the segment data. Only shown if you are segment owner.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "MySegment"
+                    },
+                    "externalSegmentName":
+                    {
+                        "description": "The segment name assigned by the data provider. A data provider is the supplier of the segment data.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "My Segment Name"
+                    },
+                    "modifiedDate":
+                    {
+                        "description": "The date the segment was modified in YYYY-MM-DD HH:mm:ss format",
+                        "type": "string",
+                        "format": "string",
+                        "example": "2023-04-14 23:05:00"
+                    },
+                    "owner":
+                    {
+                        "$ref": "#/components/schemas/segments.SegmentOwner"
+                    },
+                    "pidCount":
+                    {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1234
+                    },
+                    "providerID":
+                    {
+                        "description": "The ID of the data provider. A data provider is the supplier of the segment data.",
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "segmentID":
+                    {
+                        "description": "The Index-generated segment ID.",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1234
+                    },
+                    "segmentStatus":
+                    {
+                        "description": "The status of the segment, where:<br />`A` = active",
+                        "type": "string",
+                        "format": "string",
+                        "example": "A"
+                    },
+                    "terms":
+                    {
+                        "description": "The terms of use of this segment",
+                        "allOf":
+                        [
+                            {
+                                "$ref": "#/components/schemas/segments.SegmentTermsPatchPost"
+                            }
+                        ]
+                    }
+                }
+            },
+            "segments.AccessTerm":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "accountID":
+                    {
+                        "description": "The account ID that this access term applies to. To get an `accountID`, run the [List account information](accountsget) route.",
+                        "type": "integer"
+                    },
+                    "rule":
+                    {
+                        "description": "The rule for this access term, either:<br>`ALLOW`: The specified account can view and use this segment.<br>`BLOCK`: The specified account can't view or use this segment.",
+                        "allOf":
+                        [
+                            {
+                                "$ref": "#/components/schemas/segments.AccessRule"
+                            }
+                        ]
+                    }
+                }
+            },
+            "segments.SegmentTerms":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "accessSetting":
+                    {
+                        "description": "The access setting of the segment, where:<br>`PUBLIC`= This segment can be seen and used by any account.<br>`CUSTOM`= This segment can only be seen and used by the accounts with permission. To specify which accounts can access this segment, use the [Add access term](segmentsaddaccessterm) route. If you don't permission it to any accounts, it will be a private segment only available to you.",
+                        "allOf":
+                        [
+                            {
+                                "$ref": "#/components/schemas/segments.AccessSetting"
+                            }
+                        ]
+                    },
+                    "termsID":
+                    {
+                        "description": "The ID of the segment terms record",
+                        "type": "integer",
+                        "format": "int32",
+                        "example": 1234
+                    }
+                }
+            },
+            "segments.SegmentTermsPatchPost":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "accessSetting":
+                    {
+                        "description": "The access setting of the segment, where:<br>`PUBLIC`= This segment can be seen and used by any account.<br>`CUSTOM`= This segment can only be seen and used by the accounts with permission. To specify which accounts can access this segment, use the [Add access term](segmentsaddaccessterm) route. If you don't permission it to any accounts, it will be a private segment only available to you.",
+                        "allOf":
+                        [
+                            {
+                                "$ref": "#/components/schemas/segments.AccessSetting"
+                            }
+                        ]
+                    },
+                    "standardFee":
+                    {
+                        "description": "The fee associated with this segment which applies to anyone except: segment owner, or anyone who has a custom fee for their account and/or deal",
+                        "allOf":
+                        [
+                            {
+                                "$ref": "#/components/schemas/segments.SegmentFee"
+                            }
+                        ]
+                    },
+                    "termsID":
+                    {
+                        "description": "The ID of the segment terms record",
+                        "type": "integer",
+                        "format": "int32",
+                        "example": 1234
+                    }
+                }
+            },
+            "segments.SegmentPatchResponse":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "access":
+                    {
+                        "description": "The access level of the segment, where:<br />`W` = write (owner of the segment)<br />`R` = read (permission to use the segment)",
+                        "type": "string",
+                        "format": "string",
+                        "enum":
+                        [
+                            "R",
+                            "W",
+                            "I"
+                        ],
+                        "example": "W"
+                    },
+                    "audienceID":
+                    {
+                        "description": "The Index-generated audience ID",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1234
+                    },
+                    "createdDate":
+                    {
+                        "description": "The date the segment was created in YYYY-MM-DD HH:mm:ss format",
+                        "type": "string",
+                        "format": "string",
+                        "example": "2023-04-14 23:05:00"
+                    },
+                    "dataProvider":
+                    {
+                        "$ref": "#/components/schemas/segments.DataProvider"
+                    },
+                    "description":
+                    {
+                        "description": "The segment description assigned by the data provider. A data provider is the supplier of the segment data.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "Segment description."
+                    },
+                    "expiryDate":
+                    {
+                        "description": "The date that the segment fee expires.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "2023-04-14 23:05:00"
+                    },
+                    "externalSegmentID":
+                    {
+                        "description": "The segment ID assigned by the data provider. A data provider is the supplier of the segment data. Only shown if you are the segment owner.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "MySegment"
+                    },
+                    "externalSegmentName":
+                    {
+                        "description": "The segment name assigned by the data provider. A data provider is the supplier of the segment data.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "My Segment Name"
+                    },
+                    "modifiedDate":
+                    {
+                        "description": "The date the segment was modified in YYYY-MM-DD HH:mm:ss format",
+                        "type": "string",
+                        "format": "string",
+                        "example": "2023-04-14 23:05:00"
+                    },
+                    "owner":
+                    {
+                        "$ref": "#/components/schemas/segments.SegmentOwner"
+                    },
+                    "pidCount":
+                    {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1234
+                    },
+                    "providerID":
+                    {
+                        "description": "The ID of the data provider. A data provider is the supplier of the segment data.",
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "segmentID":
+                    {
+                        "description": "The Index-generated segment ID.",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1234
+                    },
+                    "segmentStatus":
+                    {
+                        "description": "The status of the segment, where:<br />`A` = active",
+                        "type": "string",
+                        "format": "string",
+                        "example": "A"
+                    },
+                    "terms":
+                    {
+                        "description": "The terms of use of this segment",
+                        "allOf":
+                        [
+                            {
+                                "$ref": "#/components/schemas/segments.SegmentTermsPatchPost"
+                            }
+                        ]
+                    }
+                }
+            },
+            "segments.Segment":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "audienceID":
+                    {
+                        "description": "The Index audience ID.",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1234
+                    },
+                    "createdDate":
+                    {
+                        "description": "The date the segment was created in YYYY-MM-DD HH:mm:ss format.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "2023-04-14 23:05:00"
+                    },
+                    "dataProvider":
+                    {
+                        "$ref": "#/components/schemas/segments.DataProvider"
+                    },
+                    "description":
+                    {
+                        "description": "The segment description assigned by the data provider. A data provider is the supplier of the segment data.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "Segment description."
+                    },
+                    "expiryDate":
+                    {
+                        "description": "The date the segment expires in YYYY-MM-DD HH:mm:ss format.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "2023-04-14 23:05:00"
+                    },
+                    "externalSegmentID":
+                    {
+                        "description": "The segment ID assigned by the data provider. A data provider is the supplier of the segment data. Only shown if you are the segment owner.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "MySegment"
+                    },
+                    "externalSegmentName":
+                    {
+                        "description": "The segment name assigned by the data provider. A data provider is the supplier of the segment data.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "My Segment Name"
+                    },
+                    "modifiedDate":
+                    {
+                        "description": "The date the segment was modified in YYYY-MM-DD HH:mm:ss format.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "2023-04-14 23:05:00"
+                    },
+                    "owner":
+                    {
+                        "$ref": "#/components/schemas/segments.SegmentOwner"
+                    },
+                    "pidCount":
+                    {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1234
+                    },
+                    "providerID":
+                    {
+                        "description": "The ID of the data provider. A data provider is the supplier of the segment data.",
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "segmentID":
+                    {
+                        "description": "The Index-generated segment ID.",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1234
+                    },
+                    "segmentStatus":
+                    {
+                        "description": "The status of the segment, where:<br />`A` = active",
+                        "type": "string",
+                        "format": "string",
+                        "example": "A"
+                    },
+                    "terms":
+                    {
+                        "description": "The terms of use of this segment",
+                        "allOf":
+                        [
+                            {
+                                "$ref": "#/components/schemas/segments.SegmentTerms"
+                            }
+                        ]
+                    }
+                }
+            },
+            "segments.DataProvider":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "id":
+                    {
+                        "description": "The ID of the segment's data provider. A data provider is the supplier of the segment data.",
+                        "type": "integer",
+                        "format": "uint"
+                    },
+                    "name":
+                    {
+                        "description": "The name of segment's data provider. A data provider is the supplier of the segment data.",
+                        "type": "string",
+                        "format": "string"
+                    }
+                }
+            },
+            "segments.SegmentOwner":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "accountID":
+                    {
+                        "description": "AccountID specifies the account of the segment owner. Segment owners add, price, and manage segments.",
+                        "type": "integer",
+                        "format": "uint",
+                        "minimum": 0,
+                        "example": 1234
+                    },
+                    "id":
+                    {
+                        "description": "The Index user ID of the segment owner. Segment owners add, price, and manage segments.",
+                        "type": "integer",
+                        "format": "uint",
+                        "example": 1234
+                    },
+                    "name":
+                    {
+                        "description": "The name of the segment owner. Segment owners add, price, and manage segments.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "OwnerName"
+                    }
+                }
+            },
+            "segments.AccessSetting":
+            {
+                "type": "string",
+                "enum":
+                [
+                    "PUBLIC",
+                    "CUSTOM"
+                ],
+                "x-enum-varnames":
+                [
+                    "PublicAccess",
+                    "CustomAccess"
+                ]
+            },
+            "segments.SegmentTermsPatchRequestBody":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "accessSetting":
+                    {
+                        "description": "The access setting of segment to return, where:<br>`PUBLIC`= This segment can be seen and used by any account.<br>`CUSTOM`= This segment can only be seen and used by specific accounts. To specify which accounts can access this segment, use the [Add access term](segmentsaddaccessterm) route. If you don't permission it to any accounts, it will be a private segment only available to you.<br>If you have specified a publisher account ID in the `accountID` field, you cannot specify an `accessSetting`.",
+                        "format": "string",
+                        "enum":
+                        [
+                            "PUBLIC",
+                            "CUSTOM"
+                        ],
+                        "allOf":
+                        [
+                            {
+                                "$ref": "#/components/schemas/segments.AccessSetting"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "standardFee":
+                    {
+                        "description": "The fee associated with this segment. It applies to anyone except the segment owner, or anyone who has a custom fee for their account and/or deal. A `standardFee` is required if the `accessSetting` is set to `PUBLIC`.",
+                        "allOf":
+                        [
+                            {
+                                "$ref": "#/components/schemas/segments.FeeRequestBody"
+                            }
+                        ],
+                        "nullable": true
+                    }
+                }
+            },
+            "segments.AccessRule":
+            {
+                "type": "string",
+                "enum":
+                [
+                    "ALLOW",
+                    "BLOCK"
+                ],
+                "x-enum-varnames":
+                [
+                    "AllowAccessRule",
+                    "BlockAccessRule"
+                ]
+            },
+            "segments.SegmentTermsPostRequestBody":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "accessSetting":
+                    {
+                        "description": "The access setting of segment to return, where:<br>`PUBLIC`= This segment can be seen and used by any account.<br>`CUSTOM`= This segment can only be seen and used by specific accounts. To specify which accounts can access this segment, use the [Add access term](segmentsaddaccessterm) route. If you don't permission it to any accounts, it will be a private segment only available to you.<br>If you have specified a publisher account ID in the `accountID` field, you cannot specify an `accessSetting`.",
+                        "format": "string",
+                        "enum":
+                        [
+                            "CUSTOM",
+                            "PUBLIC"
+                        ],
+                        "allOf":
+                        [
+                            {
+                                "$ref": "#/components/schemas/segments.AccessSetting"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "standardFee":
+                    {
+                        "description": "The fee associated with this segment. It applies to anyone except the segment owner, or anyone who has a custom fee for their account and/or deal. A `standardFee` is required if the `accessSetting` is set to `PUBLIC`.",
+                        "allOf":
+                        [
+                            {
+                                "$ref": "#/components/schemas/segments.FeeRequestBody"
+                            }
+                        ],
+                        "nullable": true
+                    }
+                }
+            },
+            "inventorygroups.Targeting":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "description":
+                    {
+                        "description": "The description for the targeting key.",
+                        "type": "string"
+                    },
+                    "keyName":
+                    {
+                        "description": "The name of the targeting key",
+                        "type": "string",
+                        "format": "string"
+                    },
+                    "sets":
+                    {
+                        "description": "The list of targeting value expressions",
+                        "type": "array",
+                        "items":
+                        {
+                            "$ref": "#/components/schemas/inventorygroups.TargetingSet"
+                        }
+                    },
+                    "targetingKeyID":
+                    {
+                        "description": "The unique identifier for the targeting key.</br><b>Note</b>: A custom targeting key can also be identified uniquely by associating the `publisherID` with the `key`. For example, `281923`/`\"MyCustomTargetingkey\"`.",
+                        "type": "integer",
+                        "format": "int"
+                    },
+                    "targetingType":
+                    {
+                        "description": "The type of targeting key ('standard' or 'custom')",
+                        "type": "string",
+                        "format": "string"
+                    }
+                }
+            },
+            "segments.SegmentFee":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "fee":
+                    {
+                        "description": "The fee details.",
+                        "allOf":
+                        [
+                            {
+                                "$ref": "#/components/schemas/segments.Fee"
+                            }
+                        ]
+                    },
+                    "feeID":
+                    {
+                        "description": "The fee ID representing the fee.",
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "targets":
+                    {
+                        "description": "The targets for the fee.",
+                        "allOf":
+                        [
+                            {
+                                "$ref": "#/components/schemas/segments.FeeTargets"
+                            }
+                        ]
+                    }
+                }
+            },
+            "segments.FeeTargets":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "account":
+                    {
+                        "description": "The account that the fee applies to.",
+                        "allOf":
+                        [
+                            {
+                                "$ref": "#/components/schemas/segments.FeeTargetAccount"
+                            }
+                        ]
+                    },
+                    "dealID":
+                    {
+                        "description": "The deal ID that the fee applies to.",
+                        "type": "integer",
+                        "format": "uint",
+                        "example": 123
+                    }
+                }
+            },
+            "segments.TargetingRestrictionsRequestBody":
+            {
+                "type": "object",
+                "required":
+                [
+                    "keyName",
+                    "sets",
+                    "targetingType"
+                ],
+                "properties":
+                {
+                    "keyName":
+                    {
+                        "description": "The targeting key name; the only supported targeting key name is `country`",
+                        "type": "string",
+                        "enum":
+                        [
+                            "country"
+                        ],
+                        "example": "country"
+                    },
+                    "sets":
+                    {
+                        "description": "The list of targeting value expressions. The supported keys requires 1 targeting set",
+                        "type": "array",
+                        "maxItems": 1,
+                        "minItems": 1,
+                        "items":
+                        {
+                            "$ref": "#/components/schemas/segments.TargetingSetRequestBody"
+                        }
+                    },
+                    "targetingType":
+                    {
+                        "description": "The type of targeting key; only `standard` is supported",
+                        "type": "string",
+                        "enum":
+                        [
+                            "standard"
+                        ],
+                        "example": "standard"
+                    }
+                }
+            },
+            "inventorygroups.TargetingSet":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "operator":
+                    {
+                        "description": "The logical expression that groups the values defined in the targeting set",
+                        "type": "string",
+                        "format": "string"
+                    },
+                    "values":
+                    {
+                        "description": "Information about the corresponding targeting values associated with a targeting key",
+                        "type": "array",
+                        "items":
+                        {
+                            "$ref": "#/components/schemas/inventorygroups.TargetingValue"
+                        }
+                    }
+                }
+            },
+            "segments.FeeRequestBody":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "calculationType":
+                    {
+                        "description": "The vendor fee calculation type, where `C` = cpm. Required if you are updating the fee.",
+                        "type": "string",
+                        "enum":
+                        [
+                            "C"
+                        ]
+                    },
+                    "currency":
+                    {
+                        "description": "The segment fee value currency. Only USD is supported. Required if you are updating the fee.",
+                        "type": "string",
+                        "enum":
+                        [
+                            "USD"
+                        ]
+                    },
+                    "description":
+                    {
+                        "description": "The description given to the segment fee.",
+                        "type": "string"
+                    },
+                    "status":
+                    {
+                        "description": "This field is only used to terminate an existing fee. To terminate a fee, change the status to `terminated` and leave all other fields in this object empty. (Not used in the Create Segment route.)",
+                        "type": "string",
+                        "enum":
+                        [
+                            "terminated"
+                        ]
+                    },
+                    "value":
+                    {
+                        "description": "The value of the segment fee in CPM. Required if updating the fee.",
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "vendorAccountID":
+                    {
+                        "description": "The account ID of the segment owner who will be paid the fee. If you are the owner of the segment and plan to be paid directly by Index, make sure that this is your account ID. To get an `accountID`, run the [List account information](accountsget) route. Required if updating the fee.",
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "segments.Fee":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "calculationType":
+                    {
+                        "description": "The segment fee calculation type, where `C` = CPM.",
+                        "type": "string",
+                        "example": "C"
+                    },
+                    "createdAt":
+                    {
+                        "description": "The date and time that the segment fee was created.",
+                        "type": "string",
+                        "example": "2023-01-01T01:02:03Z"
+                    },
+                    "currency":
+                    {
+                        "description": "The currency of the segment fee value. Only USD is supported.",
+                        "type": "string",
+                        "example": "USD"
+                    },
+                    "description":
+                    {
+                        "description": "The description given to the segment fee.",
+                        "type": "string",
+                        "example": "new fee"
+                    },
+                    "feeUID":
+                    {
+                        "description": "The Index internal ID for the segment fee.",
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "ownerAccountID":
+                    {
+                        "description": "The account ID of the owner of the segment. Segment owners add, price, and manage segments.",
+                        "type": "integer",
+                        "example": 567
+                    },
+                    "ownerID":
+                    {
+                        "description": "The Index internal account ID of the owner of the segment. Segment owners add, price, and manage segments.",
+                        "type": "integer",
+                        "example": 789
+                    },
+                    "status":
+                    {
+                        "description": "The status of the vendor fee. Can be either `active` or `terminated`.",
+                        "type": "string",
+                        "example": "active"
+                    },
+                    "terminatedAt":
+                    {
+                        "description": "If the status is `terminated`, this is the date and time that the segment fee was terminated.",
+                        "type": "string",
+                        "example": "2024-01-01T01:02:03Z"
+                    },
+                    "value":
+                    {
+                        "description": "The value of the segment fee in CPM.",
+                        "type": "number",
+                        "format": "double",
+                        "example": 10.25
+                    },
+                    "vendorAccountID":
+                    {
+                        "description": "The account ID of the segment owner who will be paid the fee. If you are the owner of the segment and plan to be paid directly by Index, make sure that this is your account ID. To get an `accountID`, run the [List account information](accountsget) route.",
+                        "type": "integer",
+                        "example": 345
+                    },
+                    "vendorID":
+                    {
+                        "description": "The internal Index account ID of the segment owner who will be paid the fee.",
+                        "type": "integer",
+                        "example": 456
+                    }
+                }
+            },
+            "segments.SegmentModifyAccessTermResponse":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "audienceID":
+                    {
+                        "description": "The Index audience ID.",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1234
+                    },
+                    "createdDate":
+                    {
+                        "description": "The date the segment was created in YYYY-MM-DD HH:mm:ss format.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "2023-04-14 23:05:00"
+                    },
+                    "dataProvider":
+                    {
+                        "$ref": "#/components/schemas/segments.DataProvider"
+                    },
+                    "description":
+                    {
+                        "description": "The segment description assigned by the data provider.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "Segment description."
+                    },
+                    "expiryDate":
+                    {
+                        "description": "The date the segment expires in YYYY-MM-DD HH:mm:ss format.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "2023-04-14 23:05:00"
+                    },
+                    "externalSegmentID":
+                    {
+                        "description": "The segment ID assigned by the data provider.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "MySegment"
+                    },
+                    "externalSegmentName":
+                    {
+                        "description": "The segment name assigned by the data provider.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "My Segment Name"
+                    },
+                    "modifiedDate":
+                    {
+                        "description": "The date the segment was modified in YYYY-MM-DD HH:mm:ss format.",
+                        "type": "string",
+                        "format": "string",
+                        "example": "2023-04-14 23:05:00"
+                    },
+                    "owner":
+                    {
+                        "$ref": "#/components/schemas/segments.SegmentOwner"
+                    },
+                    "providerID":
+                    {
+                        "description": "The ID of the data provider.",
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "segmentID":
+                    {
+                        "description": "The Index segment ID.",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1234
+                    },
+                    "segmentStatus":
+                    {
+                        "description": "The status of the segment, where:<br />`A` = active",
+                        "type": "string",
+                        "format": "string",
+                        "example": "A"
+                    },
+                    "terms":
+                    {
+                        "description": "The terms of use of this segment",
+                        "allOf":
+                        [
+                            {
+                                "$ref": "#/components/schemas/segments.SegmentTermsAccessTerms"
+                            }
+                        ]
+                    }
+                }
+            },
+            "segments.FeeTargetAccount":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "accountID":
+                    {
+                        "description": "The account ID targeted by the fee. To get an `accountID`, run the [List account information](accountsget) route.",
+                        "type": "integer",
+                        "format": "uint",
+                        "example": 123
+                    },
+                    "id":
+                    {
+                        "description": "The ID targeted by the fee.",
+                        "type": "integer",
+                        "format": "uint",
+                        "example": 456
+                    }
+                }
+            },
+            "inventorygroups.TargetingValue":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "label":
+                    {
+                        "description": "The description for the targeting value",
+                        "type": "string",
+                        "format": "string"
+                    },
+                    "value":
+                    {
+                        "description": "The name of the targeting value associated with a targeting key",
+                        "type": "string",
+                        "format": "string"
+                    }
+                }
+            },
+            "segments.RemoveAccessTermRequestBody":
+            {
+                "type": "object",
+                "required":
+                [
+                    "accountID"
+                ],
+                "properties":
+                {
+                    "accountID":
+                    {
+                        "description": "The accountID for which to remove the segment's access term.",
+                        "type": "integer"
+                    }
+                }
+            },
+            "segments.SegmentTermsAccessTerms":
+            {
+                "type": "object",
+                "required":
+                [
+                    "accessSetting",
+                    "termsID"
+                ],
+                "properties":
+                {
+                    "accessSetting":
+                    {
+                        "description": "The segment's access setting, where:<br>`PUBLIC` = Any account can view and use the segment<br>`custom` = This segment can only be seen and used by specific accounts. To specify which accounts can access this segment, use the [Add access term](segmentsaddaccessterm) route. If you don't permission it to any accounts, it will be a private segment only available to you.",
+                        "allOf":
+                        [
+                            {
+                                "$ref": "#/components/schemas/segments.AccessSetting"
+                            }
+                        ]
+                    },
+                    "accessTerms":
+                    {
+                        "description": "The access terms which define the allowed accounts, blocked account, and their respective fees",
+                        "type": "array",
+                        "items":
+                        {
+                            "$ref": "#/components/schemas/segments.AccessTerm"
+                        }
+                    },
+                    "standardFee":
+                    {
+                        "description": "The fee associated with this segment which applies to anyone except: segment owner, or anyone who has a custom fee for their account and/or deal",
+                        "allOf":
+                        [
+                            {
+                                "$ref": "#/components/schemas/segments.SegmentFee"
+                            }
+                        ]
+                    },
+                    "termsID":
+                    {
+                        "description": "The ID of the segment terms record",
+                        "type": "integer",
+                        "format": "int32",
+                        "example": 1234
+                    }
+                }
+            },
+            "segments.TargetingSetRequestBody":
+            {
+                "type": "object",
+                "required":
+                [
+                    "operator",
+                    "values"
+                ],
+                "properties":
+                {
+                    "operator":
+                    {
+                        "description": "Information about the corresponding targeting values associated with a targeting key. The values must have been previously created. To determine the valid values, run the [List targeting values for a specific key](targetingvaluesget) route.",
+                        "type": "string",
+                        "enum":
+                        [
+                            "ANY_OF"
+                        ],
+                        "example": "ANY_OF"
+                    },
+                    "values":
+                    {
+                        "description": "The logical expression that groups the values defined in the targeting set. The supported targeting keys only allow ANY_OF operators.",
+                        "type": "array",
+                        "minItems": 1,
+                        "items":
+                        {
+                            "type": "string"
+                        },
+                        "example":
+                        [
+                            "['value']"
+                        ]
+                    }
+                }
+            }
+        },
+        "securitySchemes":
+        {
+            "ApiKeyAuth":
+            {
+                "type": "apiKey",
+                "in": "header",
+                "name": "Authorization",
+                "description": "API key authentication using the Authorization header"
+            },
+            "BearerAuth":
+            {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "description": "Use JWT Bearer token for authorization."
+            }
+        }
+    },
+    "security":
+    [
+        {
+            "BearerAuth":
+            []
+        },
+        {
+            "ApiKeyAuth":
+            []
+        }
+    ]
+}

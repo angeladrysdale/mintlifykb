@@ -54,6 +54,9 @@
               {
                 "item": "Deals Web API",
                 "openapi": "api-reference/deals-api-aug25.json"
+              },
+              {
+                "item": "Segments API"
               }
             ]
           }
@@ -66,6 +69,12 @@
             "group": "Deals APIs",
             "pages": [
               "deals-api"
+            ]
+          },
+          {
+            "group": "Segments APIs",
+            "pages": [
+              "segment-api-getting-started"
             ]
           }
         ]
