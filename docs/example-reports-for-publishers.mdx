@@ -1,0 +1,296 @@
+---
+title: 'Example reports for publishers'
+---
+This page provides json examples that you can use to build reports through the Reporting API. For a full list of field combinations, see [Curated report field groupings for publishers](doc:curated-report-field-groupings).
+
+## Supply report (weekly)
+
+This report is focused on weekly publisher account activity and is delivered on Monday, every week. Please note that the below includes both required and optional json objects. 
+
+```json
+{
+  "accounts": [{{accountID}}],
+  "reportTitle": "Weekly Supply Report",
+  "startDate": "",
+  "endDate": "",
+  "querySpec": {
+    "fields": [
+      "day",
+      "site_id",
+      "site_name",
+      "domain",
+      "size",
+      "device_type",
+      "country",
+      "bid_request",
+      "total_bids",
+      "impressions",
+      "ad_spend",
+      "publisher_payment",
+      "cpm",
+      "eCPM"
+    ],
+    "filters": {
+      "dimensionGroups": null,
+      "measureGroups": null
+    }
+  },
+  "delivery": {
+    "email": ["{{emailaddress@email.com}}"],
+    "s3": null
+  },
+  "dateRange": {
+    "previous": {
+      "hours": 0,
+      "days": 0,
+      "weeks": 1,
+      "months": 0,
+      "includeCurrent": false
+    },
+    "current": "",
+    "from": "",
+    "to": ""
+  },
+  "schedule": {
+    "cadence": "weekly",
+    "dayOfWeek": "monday",
+    "month": "",
+    "dayOfMonth": 0
+  }
+}
+```
+
+## Deals report (hourly)
+
+This report is focused on hourly deal activity and can be used to troubleshoot or improve deal spend. 
+
+```json
+{
+  "accounts": [{{accountID}}],
+  "reportTitle": "Deals Hourly",
+  "schedule": {
+    "cadence": "hourly"
+  },
+  "delivery": {
+    "email": ["{{emailaddress@email.com}}"]
+  },
+  "querySpec": {
+    "fields": [
+      "hour",
+      "supply_source",
+      "dsp_name",
+      "deal_id",
+      "deal_name",
+      "deal_id",
+      "bid_request",
+      "bid_error",
+      "bid_timeout",
+      "bid_pass",
+      "bid_below_floor",
+      "bid_in_review",
+      "bid_blocked",
+      "bid_eligible",
+      "bid_chosen",
+      "bid_below_floor_opportunity",
+      "bid_in_review_opportunity",
+      "bid_blocked_opportunity",
+      "bid_eligible_opportunity",
+      "bid_chosen_opportunity",
+      "deal_impressions",
+      "deal_ad_spend",
+      "deal_publisher_payment"
+    ]
+  }
+}
+```
+
+## Deals report (daily)
+
+This report is focused on daily deal activity and can be used to troubleshoot or improve deal spend. The sample below is a report for the last seven days of data, delivered every day. Please note that the below includes both required and optional json objects. 
+
+```json
+{
+  "accounts": [{{accountID}}],
+  "reportTitle": "Last 7 Days - Daily Deals",
+  "startDate": "",
+  "endDate": "",
+  "querySpec": {
+    "fields": [
+      "day",
+      "dsp_name",
+      "deal_id",
+      "deal_name",
+      "bid_request",
+      "bid_in_review",
+      "bid_blocked",
+      "total_bids",
+      "deal_impressions",
+      "deal_ad_spend",
+      "deal_cpm"
+    ],
+    "filters": {
+      "dimensionGroups": null,
+      "measureGroups": null
+    }
+  },
+  "delivery": {
+    "email": ["{{emailaddress@email.com}}"],
+    "s3": null
+  },
+  "dateRange": {
+    "previous": {
+      "hours": 0,
+      "days": 7,
+      "weeks": 0,
+      "months": 0,
+      "includeCurrent": false
+    },
+    "current": "",
+    "from": "",
+    "to": ""
+  },
+  "schedule": {
+    "cadence": "daily",
+    "dayOfWeek": "",
+    "month": "",
+    "dayOfMonth": ""
+  }
+}
+```
+
+## Brand report (monthly)
+
+Below is a sample brand report for the last month's data. Please note that the below includes both required and optional json objects. 
+
+```json
+{
+  "accounts": [{{accountID}}],
+  "reportTitle": "Last Month - Brand and Buyer Report ",
+  "startDate": "",
+  "endDate": "",
+  "querySpec": {
+    "fields": [
+      "month",
+      "dsp_name",
+      "brand_name",
+      "buyer_name",
+      "country",
+      "bid_chosen",
+      "impressions",
+      "ad_spend",
+      "cpm"
+    ],
+    "filters": {
+      "dimensionGroups": null,
+      "measureGroups": null
+    }
+  },
+  "delivery": {
+    "email": ["{{emailaddress@email.com}}"],
+    "s3": null
+  },
+  "dateRange": {
+    "previous": {
+      "hours": 0,
+      "days": 0,
+      "weeks": 0,
+      "months": 1,
+      "includeCurrent": false
+    },
+    "current": "",
+    "from": "",
+    "to": ""
+  },
+  "schedule": {
+    "cadence": "",
+    "dayOfWeek": "",
+    "month": "",
+    "dayOfMonth": ""
+  }
+}
+```
+
+## Brand report (daily)
+
+Below is a sample brand report that delivers each day with the last seven days worth of data. 
+
+```json
+{
+  "accounts": [{{accountID}}],
+  "reportTitle": "Daily Brand Report Last 7 Days",
+  "dateRange": {
+    "previous": {
+      "days": 7
+    }
+  },
+  "querySpec": {
+    "fields": ["day", "brand_name", "impressions", "ad_spend"]
+  },
+  "delivery": {
+    "email": ["{{emailaddress@email.com}}"]
+  }
+}
+```
+
+## Monthly Ad Spend in Index Marketplaces
+
+This report gives you insight into Marketplace-based ad spend over the last month, broken out by Marketplace Partner.
+
+```json
+{
+  "delivery": {
+    "email": [
+      "myemail@email.com"
+    ]
+  },
+  "querySpec": {
+    "fields": [
+      "ad_spend",
+      "marketplace_media_spend",
+      "marketplace_owner_id",
+      "marketplace_owner_name",
+    ]
+  },
+  "dateRange": {
+    "current": "month"
+  },
+  "accounts": [
+    12345
+  ],
+  "reportStatus": "saved",
+  "reportTitle": "Monthly Ad Spend in Index Marketplaces"
+}
+
+```
+
+## Performance for Deals with Marketplaces Targeted by a Marketplace Package
+
+This report gives you insight into the monthly performance of your Deals with Marketplaces that were targeted by a Marketplace Package.
+
+```json
+{
+  "delivery": {
+    "email": [
+      "myemail@email.com"
+    ]
+  },
+  "querySpec": {
+    "fields": [
+      "ad_spend",
+      "deal_id",
+      "marketplace_media_spend",
+      "marketplace_targeted_deal_id",
+      "marketplace_targeted_deal_name"
+    ]
+  },
+  "dateRange": {
+    "current": "month"
+  },
+  "accounts": [
+    12345
+  ],
+  "reportStatus": "saved",
+  "reportTitle": "Targeted Deals with Marketplaces Performance"
+}
+
+```
