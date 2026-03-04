@@ -10,13 +10,23 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "API Reference"
+        "tab": "API Reference",
+        "menu": [
+          {
+            "item": "Deals API",
+            "openapi": "api-reference/deals-api-aug25.json"
+          }
+        ]
       },
       {
         "tab": "Knowledge Base",
-        "pages": [
-          "hompage",
-          "quickstart"
+        "groups": [
+          {
+            "group": "Media Owners",
+            "pages": [
+              "getting-started"
+            ]
+          }
         ]
       }
     ]
