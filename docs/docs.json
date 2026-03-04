@@ -22,50 +22,60 @@
         }
       ]
     },
-    "languages": [
+    "tabs": [
       {
-        "language": "fr",
-        "products": [
+        "tab": "API Reference",
+        "languages": [
           {
-            "product": "Index Knowledge Base",
-            "tabs": [
+            "language": "fr",
+            "products": [
               {
-                "tab": "API Reference",
-                "menu": [
+                "product": "Knowledge Base",
+                "tabs": [
                   {
-                    "item": "Deals Web API",
-                    "openapi": "api-reference/deals-api-aug25.json"
+                    "tab": "API Reference",
+                    "menu": [
+                      {
+                        "item": "Deals Web API",
+                        "openapi": "api-reference/deals-api-aug25.json"
+                      },
+                      {
+                        "item": "Segments API",
+                        "openapi": "api-reference/segments-nov-2025.json"
+                      }
+                    ]
                   },
                   {
-                    "item": "Segments API",
-                    "openapi": "api-reference/segments-nov-2025.json"
+                    "tab": "Docs",
+                    "pages": [
+                      {
+                        "group": "Getting started",
+                        "pages": [
+                          "index",
+                          "customization",
+                          "testing"
+                        ]
+                      },
+                      {
+                        "group": "Content",
+                        "pages": [
+                          "components",
+                          "guides/example"
+                        ]
+                      }
+                    ]
                   }
-                ]
-              },
-              {
-                "tab": "Docs",
-                "pages": [
-                  {
-                    "group": "Getting started",
-                    "pages": [
-                      "index",
-                      "quickstart",
-                      "customization",
-                      "testing"
-                    ]
-                  },
-                  {
-                    "group": "Content",
-                    "pages": [
-                      "components",
-                      "guides/example"
-                    ]
-                  },
-                  "hompage"
                 ]
               }
             ]
           }
+        ]
+      },
+      {
+        "tab": "Knowledge Base",
+        "pages": [
+          "hompage",
+          "quickstart"
         ]
       }
     ]
